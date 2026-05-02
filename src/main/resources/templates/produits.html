@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head">
+    <title>Liste des Produits</title>
+</head>
+<body>
+<div th:replace="layout :: navigation"></div>
+
+<div class="container mt-4">
+
+    <!-- Bouton Ajouter -->
+    <a class="btn btn-primary mb-3" th:href="@{/produits/add}">Ajouter un produit</a>
+
+        <h2 class="mb-4">Produits disponibles</h2>
+
+        <!-- Message de confirmation -->
+        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${message}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+
+    <a th:href="@{/logout}" class="btn btn-secondary">Se déconnecter</a>
+
+
+    <!-- Tableau Bootstrap -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${produits}">
+            <td th:text="${p.nom}"></td>
+            <td th:text="${p.description}"></td>
+            <td th:text="${p.prix}"></td>
+            <td>
+                <!-- Bouton Modifier -->
+                <a class="btn btn-warning btn-sm" th:href="@{'/produits/edit/' + ${p.id}}">Modifier</a>
+                <!-- Bouton Supprimer -->
+                <a class="btn btn-danger btn-sm" th:href="@{'/produits/delete/' + ${p.id}}"
+                   onclick="return confirm('Voulez-vous vraiment supprimer ce produit ?');">
+                    Supprimer
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="layout :: scripts"></div>
+</body>
+</html>

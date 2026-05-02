@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulaire Produit</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-5">
+
+<h2 th:text="${produit.id == null ? 'Ajouter un produit' : 'Modifier un produit'}"
+    class="mb-4"></h2>
+
+<form th:action="@{/produits/save}" th:object="${produit}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+
+    <div class="mb-3">
+        <label for="nom" class="form-label">Nom du produit</label>
+        <input type="text" th:field="*{nom}" class="form-control" id="nom" placeholder="Ex: Ordinateur" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea th:field="*{description}" class="form-control" id="description" rows="3"
+                  placeholder="Ex: Portable Lenovo"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="prix" class="form-label">Prix</label>
+        <input type="number" th:field="*{prix}" class="form-control" id="prix" placeholder="Ex: 750.00" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Valider</button>
+    <a th:href="@{/produits}" class="btn btn-secondary">Annuler</a>
+</form>
+
+</body>
+</html>

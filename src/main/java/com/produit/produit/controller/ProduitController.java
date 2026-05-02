@@ -3,6 +3,7 @@ package com.produit.produit.controller;
 import com.produit.produit.entity.Produit;
 import com.produit.produit.service.ProduitService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +38,15 @@ public class ProduitController {
     @DeleteMapping("/delete/{id}")
     public String supprimerProduit(@PathVariable Long id) {
         return produitService.supprimerProduit(id);
+
     }
+    @Controller
+    public class LoginController {
+        @GetMapping("/login")
+        public String login() {
+            return "login"; // correspond à login.html dans templates
+        }
+    }
+
+
 }

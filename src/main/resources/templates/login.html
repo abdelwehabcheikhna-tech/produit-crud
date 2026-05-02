@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Connexion</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-5">
+
+<h2 class="mb-4">Connexion</h2>
+
+<!-- Message d'erreur si login échoue -->
+<div th:if="${param.error}" class="alert alert-danger">
+    Identifiants invalides. Veuillez réessayer.
+</div>
+
+<!-- Message si l'utilisateur s'est déconnecté -->
+<div th:if="${param.logout}" class="alert alert-success">
+    Vous vous êtes déconnecté avec succès.
+</div>
+
+<form th:action="@{/login}" method="post">
+    <div class="mb-3">
+        <label for="username" class="form-label">Nom d'utilisateur</label>
+        <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Se connecter</button>
+</form>
+
+</body>
+</html>
