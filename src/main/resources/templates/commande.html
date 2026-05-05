@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Commande validée</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-5">
+
+<h2>Merci pour votre achat !</h2>
+
+<p>Votre commande a été enregistrée.</p>
+
+<h4>Détails :</h4>
+<ul>
+  <li th:each="p : ${commande.produits}" th:text="${p.nom} + ' - ' + ${p.prix} + ' MRU'"></li>
+</ul>
+
+<h4>Total : <span th:text="${commande.total} + ' MRU'"></span></h4>
+
+<a th:href="@{/catalogue}" class="btn btn-primary">Retour au catalogue</a>
+
+</body>
+</html>

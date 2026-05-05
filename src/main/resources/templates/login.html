@@ -1,36 +1,76 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Connexion</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <title>Connexion - ProduitApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .login-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body class="container mt-5">
 
-<h2 class="mb-4">Connexion</h2>
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card login-card">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="mb-0">🔐 Connexion</h3>
+            </div>
+            <div class="card-body p-4">
 
-<!-- Message d'erreur si login échoue -->
-<div th:if="${param.error}" class="alert alert-danger">
-    Identifiants invalides. Veuillez réessayer.
+                <!-- Message d'erreur -->
+                <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show">
+                    <strong>❌ Erreur !</strong> Identifiants invalides. Veuillez réessayer.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Message de déconnexion -->
+                <div th:if="${param.logout}" class="alert alert-success alert-dismissible fade show">
+                    <strong>✅ Déconnecté !</strong> Vous vous êtes déconnecté avec succès.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">👤 Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                               placeholder="admin ou client" required autofocus>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">🔒 Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-login w-100 py-2">Se connecter</button>
+                </form>
+
+                <hr class="my-3">
+                <div class="text-center text-muted small">
+                    <p class="mb-0">👨‍💼 Administrateur: <strong>admin</strong> / password</p>
+                    <p class="mb-0">👤 Client: <strong>client</strong> / 1234</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Message si l'utilisateur s'est déconnecté -->
-<div th:if="${param.logout}" class="alert alert-success">
-    Vous vous êtes déconnecté avec succès.
-</div>
-
-<form th:action="@{/login}" method="post">
-    <div class="mb-3">
-        <label for="username" class="form-label">Nom d'utilisateur</label>
-        <input type="text" class="form-control" id="username" name="username" required>
-    </div>
-
-    <div class="mb-3">
-        <label for="password" class="form-label">Mot de passe</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Se connecter</button>
-</form>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

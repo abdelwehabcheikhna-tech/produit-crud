@@ -11,31 +11,37 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // Définition d’un utilisateur en mémoire
     @Bean
     public UserDetailsService userDetailsService() {
-        var user = User.withUsername("admin")
-                .password("{noop}password") // {noop} = pas d’encodage
+        var admin = User.withUsername("admin")
+                .password("{noop}password")
                 .roles("ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(user);
+
+        var client = User.withUsername("client")
+                .password("{noop}1234")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, client);
     }
 
-    // Configuration des règles de sécurité
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/produits/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/produits/**", "/css/**", "/js/**").hasRole("ADMIN")
+                        .requestMatchers("/client/**", "/catalogue/**", "/panier/**", "/commande/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/login", "/logout").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // page Thymeleaf personnalisée
-                        .defaultSuccessUrl("/produits", true)
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/client", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
         return http.build();

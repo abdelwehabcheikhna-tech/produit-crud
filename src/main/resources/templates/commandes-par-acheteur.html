@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Commandes par acheteur</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-5">
+
+<h2>Commandes de <span th:text="${acheteur}"></span></h2>
+
+<div th:if="${commandes.isEmpty()}" class="alert alert-info">
+    Aucune commande trouvée pour cet acheteur.
+</div>
+
+<table class="table table-striped" th:unless="${commandes.isEmpty()}">
+    <thead class="table-dark">
+    <tr>
+        <th>ID Commande</th>
+        <th>Total</th>
+        <th>Produits</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${commandes}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.total} + ' MRU'"></td>
+        <td>
+            <ul>
+                <li th:each="p : ${c.produits}" th:text="${p.nom} + ' - ' + ${p.price} + ' MRU'"></li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/client}" class="btn btn-secondary mt-3">Retour à l'accueil</a>
+
+</body>
+</html>

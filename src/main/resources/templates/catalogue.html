@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Catalogue</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-5">
+
+<h2>Catalogue des produits</h2>
+
+<div th:each="p : ${produits}" class="card mb-3">
+  <div class="card-body">
+    <h5 th:text="${p.nom}"></h5>
+    <p th:text="${p.description}"></p>
+    <p><strong th:text="${p.prix} + ' MRU'"></strong></p>
+    <a th:href="@{'/panier/add/' + ${p.id}}" class="btn btn-success">Ajouter au panier</a>
+  </div>
+</div>
+
+<a th:href="@{/panier}" class="btn btn-primary">Voir mon panier</a>
+
+</body>
+</html>
