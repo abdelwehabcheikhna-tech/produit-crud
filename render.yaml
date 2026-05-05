@@ -1,0 +1,14 @@
+
+services:
+  - type: web
+    name: produit-app
+    runtime: image
+    repo: https://github.com/abdelwehabcheikhna-tech/produit-crud
+    branch: main
+    plan: free
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/*.jar --spring.profiles.active=prod
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
