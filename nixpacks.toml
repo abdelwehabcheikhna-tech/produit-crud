@@ -1,0 +1,14 @@
+﻿[phases.setup]
+nixPkgs = ["nodejs", "openjdk21"]
+
+[phases.install]
+cmds = ["apt-get update", "apt-get install -y maven"]
+
+[phases.build]
+cmds = ["mvn clean package -DskipTests"]
+
+[start]
+cmd = "java -jar target/*.jar --spring.profiles.active=prod"
+
+[build.env]
+NIXPACKS_JAVA_VERSION = "21"
