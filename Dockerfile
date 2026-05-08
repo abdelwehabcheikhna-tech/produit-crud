@@ -1,27 +1,16 @@
-FROM eclipse-temurin:21-jdk AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copier Maven wrapper
-COPY mvnw .
-COPY .mvn .mvn
+# Copier les fichiers avec un encodage correct
 COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Rendre mvnw exécutable
-RUN chmod +x mvnw
+# Copier le code source et compiler avec l'encodage UTF-8
+COPY src ./src
+RUN mvn clean package -DskipTests -Dfile.encoding=UTF-8
 
-# Télécharger les dépendances
-RUN ./mvnw dependency:go-offline
-
-# Copier le code source
-COPY src src
-
-# Compiler
-RUN ./mvnw clean package -DskipTests
-
-# Runtime
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
