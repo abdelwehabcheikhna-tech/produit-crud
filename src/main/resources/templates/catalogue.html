@@ -1,23 +1,291 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Catalogue</title>
+  <title>Catalogue - Boutique MRU</title>
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    /* Container principal */
+    .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Header animé */
+    .catalogue-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .catalogue-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        margin-bottom: 0.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .catalogue-header h2:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #ffd89b, #c7e9fb);
+        border-radius: 2px;
+    }
+
+    .subtitle {
+        color: rgba(255,255,255,0.9);
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    /* Grille de produits */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+        margin-bottom: 3rem;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Cartes produit */
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    /* Badge de prix */
+    .price-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .card-content {
+        padding: 25px;
+    }
+
+    .product-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 12px;
+        transition: color 0.3s ease;
+    }
+
+    .product-card:hover .product-title {
+        color: #667eea;
+    }
+
+    .product-description {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+
+    /* Bouton ajouter au panier */
+    .add-to-cart-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+    }
+
+    .add-to-cart-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Section footer */
+    .action-footer {
+        text-align: center;
+        margin-top: 2rem;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .view-cart-btn {
+        background: white;
+        color: #667eea;
+        border: 2px solid white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .view-cart-btn:hover {
+        background: transparent;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        text-decoration: none;
+    }
+
+    /* Message quand aucun produit */
+    .empty-state {
+        text-align: center;
+        padding: 4rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .products-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .catalogue-header h2 {
+            font-size: 2rem;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .price-badge {
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Animation de chargement pour les cartes */
+    .product-card {
+        animation: fadeInUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .products-grid .product-card:nth-child(1) { animation-delay: 0.1s; }
+    .products-grid .product-card:nth-child(2) { animation-delay: 0.2s; }
+    .products-grid .product-card:nth-child(3) { animation-delay: 0.3s; }
+    .products-grid .product-card:nth-child(4) { animation-delay: 0.4s; }
+    .products-grid .product-card:nth-child(5) { animation-delay: 0.5s; }
+    .products-grid .product-card:nth-child(6) { animation-delay: 0.6s; }
+  </style>
 </head>
-<body class="container mt-5">
+<body>
+<div class="main-container">
+  <!-- En-tête du catalogue -->
+  <div class="catalogue-header">
+    <h2>🛍️ Notre Catalogue</h2>
+    <div class="subtitle">Découvrez notre sélection de produits exceptionnels</div>
+  </div>
 
-<h2>Catalogue des produits</h2>
+  <!-- Grille de produits -->
+  <div class="products-grid" th:unless="${#lists.isEmpty(produits)}">
+    <div th:each="p : ${produits}" class="product-card">
+      <div class="price-badge">
+        <span th:text="${p.prix} + ' MRU'"></span>
+      </div>
+      <div class="card-content">
+        <div class="product-title" th:text="${p.nom}"></div>
+        <div class="product-description" th:text="${p.description}"></div>
+        <a th:href="@{'/panier/add/' + ${p.id}}" class="add-to-cart-btn">
+          🛒 Ajouter au panier
+        </a>
+      </div>
+    </div>
+  </div>
 
-<div th:each="p : ${produits}" class="card mb-3">
-  <div class="card-body">
-    <h5 th:text="${p.nom}"></h5>
-    <p th:text="${p.description}"></p>
-    <p><strong th:text="${p.prix} + ' MRU'"></strong></p>
-    <a th:href="@{'/panier/add/' + ${p.id}}" class="btn btn-success">Ajouter au panier</a>
+  <!-- Message si aucun produit -->
+  <div th:if="${#lists.isEmpty(produits)}" class="empty-state">
+    <div>📦</div>
+    <h3>Aucun produit disponible</h3>
+    <p>Notre catalogue est en cours de mise à jour. Revenez bientôt !</p>
+  </div>
+
+  <!-- Bouton voir le panier -->
+  <div class="action-footer">
+    <a th:href="@{/panier}" class="view-cart-btn">
+      🛒 Voir mon panier →
+    </a>
   </div>
 </div>
-
-<a th:href="@{/panier}" class="btn btn-primary">Voir mon panier</a>
-
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.produit.produit.service;
+package com.produit.produit.config;
 
 import com.produit.produit.entity.User;
 import com.produit.produit.repository.UserRepository;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

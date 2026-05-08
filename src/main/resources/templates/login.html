@@ -1,76 +1,168 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Connexion - ProduitApp</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Connexion - Boutique MRU</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            padding: 2rem 0;
         }
+
+        .login-container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         .login-card {
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
         }
-        .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
+
+        .login-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            padding: 30px;
+            text-align: center;
         }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
-<body class="container mt-5">
+<body>
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Connexion</h2>
+            <p>Bienvenue sur notre boutique</p>
+        </div>
 
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card login-card">
-            <div class="card-header bg-primary text-white text-center">
-                <h3 class="mb-0">🔐 Connexion</h3>
+        <div class="login-body">
+            <div th:if="${param.error}" class="alert alert-danger">
+                Nom d'utilisateur ou mot de passe incorrect
             </div>
-            <div class="card-body p-4">
+            <div th:if="${param.logout}" class="alert alert-success">
+                Vous avez été déconnecté avec succès
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 
-                <!-- Message d'erreur -->
-                <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show">
-                    <strong>❌ Erreur !</strong> Identifiants invalides. Veuillez réessayer.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <form th:action="@{/perform_login}" method="post">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" class="form-control" required placeholder="Entrez votre nom d'utilisateur">
                 </div>
 
-                <!-- Message de déconnexion -->
-                <div th:if="${param.logout}" class="alert alert-success alert-dismissible fade show">
-                    <strong>✅ Déconnecté !</strong> Vous vous êtes déconnecté avec succès.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" class="form-control" required placeholder="Entrez votre mot de passe">
                 </div>
 
-                <form th:action="@{/login}" method="post">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">👤 Nom d'utilisateur</label>
-                        <input type="text" class="form-control" id="username" name="username"
-                               placeholder="admin ou client" required autofocus>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">🔒 Mot de passe</label>
-                        <input type="password" class="form-control" id="password" name="password"
-                               placeholder="••••••" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-login w-100 py-2">Se connecter</button>
-                </form>
-
-                <hr class="my-3">
-                <div class="text-center text-muted small">
-                    <p class="mb-0">👨‍💼 Administrateur: <strong>admin</strong> / password</p>
-                    <p class="mb-0">👤 Client: <strong>client</strong> / 1234</p>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="remember-me"> Se souvenir de moi
+                    </label>
                 </div>
+
+                <button type="submit" class="btn-login">Se connecter</button>
+            </form>
+
+            <div class="register-link">
+                <p>Pas encore de compte ? <a th:href="@{/register}">Créez-en un ici</a></p>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

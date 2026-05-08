@@ -28,7 +28,7 @@ public class PanierController {
 
     @GetMapping
     public String afficherPanier(@ModelAttribute("panier") List<Produit> panier, Model model) {
-        double total = panier.stream().mapToDouble(Produit::getPrix).sum();
+        double total = panier.stream().mapToDouble(produit -> produit.getPrix()).sum();
         model.addAttribute("panier", panier);
         model.addAttribute("total", total);
         return "panier";
