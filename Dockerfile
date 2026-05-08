@@ -1,6 +1,6 @@
 
 # Dockerfile minimal
-FROM maven:3.9-openjdk-25 AS build
+FROM maven:3.9-openjdk-21 AS build
 WORKDIR /app
 
 # Copier les fichiers
